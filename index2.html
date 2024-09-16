@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Scroll Table</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .select {
+            background-color: yellow; /* 선택된 행의 배경색을 변경합니다. 필요에 따라 스타일을 조정하세요. */
+        }
+        .table-container {
+            border: 3px solid red;
+            max-height: 100px; /* 조정할 수 있습니다 */
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div><span>자 이제 시작이야</span></div>
+
+
+</body>
+<script>
+    $(document).ready(function(){
+        console.log("하잉");
+        startFun();
+    });
+
+    function startFun() {
+        let stTime = '2024-09-08 오전 3:30:15.123';
+        let stTime2 ='2024-09-08 오전 3:30:16.122';
+        endTime = convertTime(stTime);
+        endTime2 = convertTime(stTime2);
+        console.log("완료 : ", endTime ," : ", endTime2);
+
+        // 두 시간의 차이를 계산하여 초 단위로 출력
+        let timeDiffInSeconds = (endTime2.getTime() - endTime.getTime()) / 1000;
+        console.log("두 시간의 차이 (초):", timeDiffInSeconds.toFixed(3), "초");
+    }
+
+    function convertTime(stTime){
+        const [datePart, period, timePart] = stTime.split(' ');
+        const [hoursPart, minutes, seconds] = timePart.split(':');
+        
+        let hours = parseInt(hoursPart);
+
+        if (period === '오후' && hours !== 12) {
+            hours += 12;
+            console.log("gd");
+        } else if (period === '오전' && hours === 12) {
+            hours = 0; // 12AM은 0시로 변환
+            
+        }
+        const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes}:${seconds}`;
+        const formattedDate = `${datePart}T${formattedTime}`;
+
+        return new Date(formattedDate);
+
+    }
+    </script></html>
+</html>

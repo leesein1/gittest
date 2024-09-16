@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Scroll Table</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .select {
+            background-color: yellow; /* 선택된 행의 배경색을 변경합니다. 필요에 따라 스타일을 조정하세요. */
+        }
+        .table-container {
+            border: 3px solid red;
+            max-height: 100px; /* 조정할 수 있습니다 */
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div><span>자 이제 시작이야</span></div>
+    <div>
+        <button onclick="restart();">리스타트</button>
+        <button onclick="signalRData()">맨위에올리기</button>
+    </div>
+    <div class="table-container">
+        <table style="width: 100%;">
+            <tbody class="tbodyCls">
+                <!-- 초기 데이터는 restart 함수에서 채워집니다. -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let idx = 1;
+        let pageData = 100;
+        $(document).ready(function(){
+            restart();
+            $('.table-container').on('scroll', function() {
+                if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight - 10) {
+                    loadMoreData();
+                }
+            });
+        });
+
+        function signalRData(){
+            let tbody = $(".tbodyCls");
+            let html = '';
+            let trCnt = $(".tbodyCls").find("tr").length;
+            html += '<tr><td>Row'+(trCnt+1)+'</td></tr>'
+            tbody.prepend(html);
+        }
+
+        function loadMoreData(){
+            idx++;
+            let tbody = $(".tbodyCls");
+            let trCnt = $(".tbodyCls").find("tr").length;
+            let html = '';
+            for(let i = 0; i < 5; i++){  // 한 번에 100개씩 로드
+                html += '<tr class="" onclick="clk_tr(' + (trCnt + i) + ')"><td>Row ' + (trCnt + i) + '</td></tr>';
+            }
+            tbody.append(html);
+            console.log("새 데이터 로드됨",idx);
+        }
+
+        function restart(){
+
+            let tbody = $(".tbodyCls");
+            let html = '';
+            tbody.empty();
+            for(let i = 0; i < 5; i++){  
+                html += '<tr class="" onclick="clk_tr('+i+')"><td>Row '+i+'</td></tr>';
+            }
+            tbody.html(html);
+            alert("재실행 완료");
+            console.log("초기값 :", idx);
+            console.log("초기값 :", pageData);
+        }
+    </script>
+    <script>
+        
+    </script>
+</body>
+</html>
